@@ -15,5 +15,4 @@ Takes an arbitrary amount of sorted arrays and returns the intersect as a stream
     .on('end', function(err) {
       // result is now [ 'deserunt', 'ea', 'euismod', 'movet', 'sed.' ]
     })
-})
 ```
