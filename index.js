@@ -8,34 +8,47 @@ var Readable = require('stream').Readable
 
 exports.getIntersectionStream = function(sortedSets) {
   var s = new Readable
+  var i = 0    // identifies array
+  var ii = []  // identifies index in each array
+  for (var k = 0; k < sortedSets.length; k++) {
+    ii[k] = 0
+  }
 
-  var i = 0
+  var finished = false
   // walk along the set of given arrays
-  while (sortedSets[sortedSets.length - 1].length > 0) {
-    if (sortedSets[i][0] < sortedSets[i + 1][0]) {
-      sortedSets[i].shift()
+  while (!finished) {
+    if (sortedSets[i][ii[i]] < sortedSets[i + 1][ii[i + 1]]) {
+      ii[i]++
+      // sortedSets[i].shift()
     }
-    else if (sortedSets[i][0] > sortedSets[i + 1][0]) {
-      sortedSets[i + 1].shift()
+    else if (sortedSets[i][ii[i]] > sortedSets[i + 1][ii[i + 1]]) {
+      ii[i + 1]++
+      // sortedSets[i + 1].shift()
     }
     // there is an intersection between two arrays- now see if the
     // next array also contains this item
     else if ((i + 2) < sortedSets.length) {
-      sortedSets[i].shift()
+      ii[i]++
+      // sortedSets[i].shift()
       i++
     }
     // All arrays have been traversed and the item was present in each
     // array. Therefore this item is in the intersection set. Emit the
     // item in the stream    
     else {
-      s.push(sortedSets[i][0] + '')
-      sortedSets[i].shift()
-      sortedSets[i + 1].shift()
+      s.push(sortedSets[i][ii[i]] + '')
+      ii[i]++
+      ii[i + 1]++
+
+      for (var k = 0; k < sortedSets.length; k++) {
+        if (ii[k] >= sortedSets[k].length) finished = true
+      }
       i = 0
     }
   }
 
-  s.push(null)      // indicates the end of the stream
+  // indicates the end of the stream
+  s.push(null)
 
   return s
 }
