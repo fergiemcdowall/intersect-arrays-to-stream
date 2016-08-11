@@ -1,6 +1,6 @@
 {
   "name": "intersect-arrays-to-stream",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A utility that takes 1 or more sorted arrays and emits a node stream event whenever an intersection is found",
   "main": "index.js",
   "scripts": {

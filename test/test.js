@@ -77,6 +77,37 @@ test('Should cope with just 2 arrays', function (t) {
     })
 })
 
+test('Should cope with just 1 array', function (t) {
+  t.plan(2)
+  var arr = [
+    [1, 2, 3, 4, 5]
+  ]
+  var result = []
+  iats.getIntersectionStream(arr)
+    .on('data', function(data) {
+      result.push(data.toString())
+    })
+    .on('end', function(err) {
+      t.error(err)
+      t.looseEqual(result, [ '1', '2', '3' , '4', '5'])
+    })
+})
+
+test('Should cope with no arrays', function (t) {
+  t.plan(2)
+  var arr = []
+  var result = []
+  iats.getIntersectionStream(arr)
+    .on('data', function(data) {
+      result.push(data.toString())
+    })
+    .on('end', function(err) {
+      t.error(err)
+      t.looseEqual(result, [])
+    })
+})
+
+
 test('Should cope with big arrays', function (t) {
   var start = Date.now()
   t.plan(3)
